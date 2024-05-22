@@ -2,19 +2,27 @@ import requests
 
 results_limit = 500  # Updated limit to 500
 
-from src.extract_data import extract_data, perform_extract_possible_map_link
-from src.scraper_utils import create_search_link, perform_visit
-from src.utils import unique_strings
-from .reviews_scraper import GoogleMapsAPIScraper
-from time import sleep, time
-from botasaurus.browser import Driver, browser, AsyncQueueResult, Wait, DetachedElementException
-from botasaurus.request import request
+def fetch_places(location, radius, place_type, api_key, desired_results_limit=500):
+    results = []
+    page_token = None
 
+    while len(results) < desired_results_limit:
+        params = {
+            'location': location,
+            'radius': radius,
+            'type': place_type,
+            'key': api_key,
+            'pagetoken': page_token,
+        }
+        response = requests.get('https://maps.googleapis.com/maps/api/place/nearbysearch/json', params=params)
+        data = response.json()
+        results.extend(data.get('results', []))
+        page_token = data.get('next_page_token')
+        if not page_token:
+            break
 
-def is_errors_instance(instances, error):
-    for i in range(len(instances)):
-        ins = instances[i]
-        if isinstance(error, ins):
+    return results[:desired_results_limit]  # Return only the desired number of results
+
             return True, i
     return False, -1
 
