@@ -2,6 +2,8 @@ from src import scraper
 from botasaurus import bt
 from botasaurus.string_utils import ht
 from botasaurus.request import request
+def get_places(location, radius, place_type, api_key, desired_results_limit=500):
+    return fetch_places(location, radius, place_type, api_key, desired_results_limit)
 
 from src.sort_filter import filter_places, sort_dict_by_keys
 
