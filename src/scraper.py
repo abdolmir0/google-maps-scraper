@@ -1,6 +1,7 @@
-import traceback
-from botasaurus import cl, bt
-from botasaurus.cache import DontCache
+import requests
+
+results_limit = 500  # Updated limit to 500
+
 from src.extract_data import extract_data, perform_extract_possible_map_link
 from src.scraper_utils import create_search_link, perform_visit
 from src.utils import unique_strings
